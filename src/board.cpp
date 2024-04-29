@@ -100,7 +100,7 @@ void Board::releasePiece() {
     }
 
     //TODO: This should work for all types of pieces!
-    const std::vector<int> legalMoves = Piece::getLegalPawnMoves(selectedPiece, selectedPieceIndex);
+    const std::vector<int> legalMoves = Piece::getLegalPawnMoves(selectedPiece, selectedPieceIndex, board);
 
     for(int i{0}; i < legalMoves.size(); i++) {
         if(releasedSquareIndex == legalMoves.at(i)) {

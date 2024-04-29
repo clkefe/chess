@@ -21,7 +21,11 @@ bool Piece::isColor(const int &piece, const int &color) {
     return (piece & PIECE_COLOR_MASK)  == color;
 }
 
-std::vector<int> Piece::getLegalPawnMoves(int piece, const int &squareIndex) {
+bool Piece::getColor(const int &piece) {
+    return (piece & PIECE_COLOR_MASK);
+}
+
+std::vector<int> Piece::getLegalPawnMoves(int piece, const int &squareIndex, const int board[]) {
     std::vector<int> legalMoves;
 
     const int rank = squareIndex / 8;
@@ -31,14 +35,21 @@ std::vector<int> Piece::getLegalPawnMoves(int piece, const int &squareIndex) {
     // Moves downward (black pieces) --> 1
     const int moveDirection = isColor(piece, White) ? -1 : 1;
 
-    legalMoves.push_back((rank + moveDirection) * 8 + file);
+    const bool isPawnOnStartingRank = rank == WHITE_PAWN_STARTING_RANK || rank == BLACK_PAWN_STARTING_RANK;
+    const int numberOfForwardMoves = isPawnOnStartingRank ? 2 : 1;
 
-    if(rank == WHITE_PAWN_STARTING_RANK || rank == BLACK_PAWN_STARTING_RANK) {
-        legalMoves.push_back((rank + (2 * moveDirection)) * 8 + file);
+    for(int i = 1; i <= numberOfForwardMoves; i++) {
+        const int moveSquare = (rank + (i * moveDirection) ) * 8 + file;
+
+        if(board[moveSquare] != None) {
+            break;
+        }
+
+        legalMoves.push_back(moveSquare);
     }
 
-    //TODO: Check for same team piece blocks, opponent piece block, cross capturing, and en passant
 
+    // TODO: Check for cross capturing, and en passant
 
     return legalMoves;
 }

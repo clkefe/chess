@@ -4,6 +4,8 @@
 #include <iostream>
 #include <vector>
 
+#include "board.h"
+
 static constexpr int PIECE_TYPE_MASK        = 0b00111;
 static constexpr int PIECE_WHITE_COLOR_MASK = 0b01000;
 static constexpr int PIECE_BLACK_COLOR_MASK = 0b10000;
@@ -32,8 +34,9 @@ public:
 
     static void loadPieceTextures();
     static bool isColor(const int &piece, const int &color);
+    static bool getColor(const int &piece);
 
-    static std::vector<int> getLegalPawnMoves(int piece, const int &squareIndex);
+    static std::vector<int> getLegalPawnMoves(int piece, const int &squareIndex, const int board[]);
 };
 
 #endif //PIECE_H
