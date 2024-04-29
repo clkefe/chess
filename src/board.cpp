@@ -3,7 +3,7 @@
 #include "piece.h"
 #include "texture_manager.h"
 
-Board::Board(sf::RenderWindow& window) : m_window{window}, board{}, selectedPieceIndex{-1} {
+Board::Board(sf::RenderWindow& window) : m_window{window}, board{}, colorToMove{}, selectedPieceIndex{-1} {
     loadFromFEN("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1");
 }
 
@@ -76,8 +76,13 @@ void Board::drawPieces() {
 
 void Board::grabPiece() {
     const int howeredSquareIndex = getHoveredSquareIndex();
+    const int selectedPiece = board[howeredSquareIndex];
 
-    if(board[howeredSquareIndex] == Piece::None) {
+    if(selectedPiece == Piece::None) {
+        return;
+    }
+
+    if(!Piece::isColor(selectedPiece, colorToMove)) {
         return;
     }
 
@@ -85,12 +90,16 @@ void Board::grabPiece() {
 }
 
 void Board::releasePiece() {
-    const int howeredSquareIndex = getHoveredSquareIndex();
+    const int releasedSquareIndex = getHoveredSquareIndex();
 
-    const int piece = board[selectedPieceIndex];
+    const int selectedPiece = board[selectedPieceIndex];
 
-    board[selectedPieceIndex] = Piece::None;
-    board[howeredSquareIndex] = piece;
+    if(selectedPieceIndex != releasedSquareIndex) {
+        board[selectedPieceIndex] = Piece::None;
+        board[releasedSquareIndex] = selectedPiece;
+
+        colorToMove = colorToMove == Piece::White ? Piece::Black : Piece::White;
+    }
 
     selectedPieceIndex = -1;
     selectedPieceSprite = {};
@@ -108,6 +117,11 @@ int Board::getHoveredSquareIndex() const {
 
 void Board::loadFromFEN(const std::string &FEN) {
     const std::string piecePlacement = FEN.substr(0, FEN.find(' '));
+
+    std::string colorToMoveString = FEN.substr(FEN.find(' ') + 1, std::size(FEN));
+    colorToMoveString = colorToMoveString.substr(0, colorToMoveString.find(' '));
+
+    colorToMove = colorToMoveString == "w" ? Piece::White : Piece::Black;
 
     int rank{0};
     int file{0};

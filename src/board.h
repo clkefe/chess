@@ -15,6 +15,7 @@ class Board {
 public:
     int board[64]; // Each index stores the piece in binary (first 3 bits -> type, last 2 bits -> color)
     int selectedPieceIndex;
+    int colorToMove;
 
     explicit Board(sf::RenderWindow &window);
 
