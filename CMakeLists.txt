@@ -17,6 +17,8 @@ add_executable(Chess src/main.cpp
         src/Piece.h
         src/texture_manager.cpp
         src/texture_manager.h
+        src/event_handler.cpp
+        src/event_handler.h
 )
 target_link_libraries(Chess PRIVATE sfml-graphics)
 target_compile_features(Chess PRIVATE cxx_std_17)

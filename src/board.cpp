@@ -3,7 +3,7 @@
 #include "piece.h"
 #include "texture_manager.h"
 
-Board::Board(sf::RenderWindow& window) : m_window{window}, board{}, colorToMove{}, selectedPieceIndex{-1} {
+Board::Board(sf::RenderWindow& window) : m_window{window}, board{}, selectedPieceIndex{-1}, colorToMove{} {
     loadFromFEN("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1");
 }
 
@@ -94,31 +94,29 @@ void Board::releasePiece() {
 
     const int selectedPiece = board[selectedPieceIndex];
 
-    if(selectedPieceIndex != releasedSquareIndex) {
-        //TODO: This should work for all types of pieces!
-        std::vector<int> legalMoves = Piece::getLegalPawnMoves(selectedPiece, selectedPieceIndex);
-
-        for(int i{0}; i < legalMoves.size(); i++) {
-            if(releasedSquareIndex == legalMoves.at(i)) {
-                board[selectedPieceIndex] = Piece::None;
-                board[releasedSquareIndex] = selectedPiece;
-
-                colorToMove = colorToMove == Piece::White ? Piece::Black : Piece::White;
-                resetSelectedPiece();
-            }
-        }
-
-    } else {
+    if(selectedPieceIndex == releasedSquareIndex) {
         resetSelectedPiece();
+        return;
     }
 
+    //TODO: This should work for all types of pieces!
+    const std::vector<int> legalMoves = Piece::getLegalPawnMoves(selectedPiece, selectedPieceIndex);
+
+    for(int i{0}; i < legalMoves.size(); i++) {
+        if(releasedSquareIndex == legalMoves.at(i)) {
+            board[selectedPieceIndex] = Piece::None;
+            board[releasedSquareIndex] = selectedPiece;
+
+            colorToMove = colorToMove == Piece::White ? Piece::Black : Piece::White;
+            resetSelectedPiece();
+        }
+    }
 }
 
 void Board::resetSelectedPiece() {
     selectedPieceIndex = -1;
     selectedPieceSprite = {};
 }
-
 
 int Board::getHoveredSquareIndex() const {
     const int mousePosX = sf::Mouse::getPosition(m_window).x;

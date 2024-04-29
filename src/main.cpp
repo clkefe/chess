@@ -1,4 +1,5 @@
 #include "board.h"
+#include "event_handler.h"
 #include "piece.h"
 
 int main() {
@@ -8,21 +9,10 @@ int main() {
     Board board{window};
     Piece::loadPieceTextures();
 
-    while (window.isOpen()) {
-        for (auto event = sf::Event{}; window.pollEvent(event);) {
-            if (event.type == sf::Event::Closed) {
-                window.close();
-            } else if (event.type == sf::Event::MouseButtonPressed) {
-                if(event.mouseButton.button == sf::Mouse::Left) {
-                    if(board.selectedPieceIndex != -1) {
-                        board.releasePiece();
-                        continue;
-                    }
+    EventHandler eventHandler(window, board);
 
-                    board.grabPiece();
-                }
-            }
-        }
+    while (window.isOpen()) {
+        eventHandler.listen();
 
         window.clear();
 
