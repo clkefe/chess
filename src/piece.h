@@ -2,7 +2,7 @@
 #define PIECE_H
 #include <map>
 
-constexpr int PIECE_TYPE_MASK = 0b00111;
+static constexpr int PIECE_TYPE_MASK        = 0b00111;
 static constexpr int PIECE_WHITE_COLOR_MASK = 0b01000;
 static constexpr int PIECE_BLACK_COLOR_MASK = 0b10000;
 static constexpr int PIECE_COLOR_MASK = PIECE_WHITE_COLOR_MASK | PIECE_BLACK_COLOR_MASK;
