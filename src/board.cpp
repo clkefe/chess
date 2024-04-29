@@ -139,4 +139,3 @@ void Board::loadFromFEN(const std::string &FEN) {
         }
     }
 }
-
