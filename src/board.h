@@ -2,6 +2,7 @@
 #define BOARD_H
 #include <SFML/Graphics.hpp>
 #include <iostream>
+#include <vector>
 
 const  sf::Color COLOR_GREEN = {sf::Color(124, 148, 93)};
 const sf::Color COLOR_WHITE =  {sf::Color(238,238,213)};
@@ -24,6 +25,7 @@ public:
 
     void grabPiece();
     void releasePiece();
+    void resetSelectedPiece();
 
     int getHoveredSquareIndex() const;
 

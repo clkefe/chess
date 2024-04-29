@@ -21,6 +21,30 @@ bool Piece::isColor(const int &piece, const int &color) {
     return (piece & PIECE_COLOR_MASK)  == color;
 }
 
+std::vector<int> Piece::getLegalPawnMoves(int piece, const int &squareIndex) {
+    std::vector<int> legalMoves;
+
+    const int rank = squareIndex / 8;
+    const int file = squareIndex % 8;
+
+    // Moves upward (white pieces) --> -1
+    // Moves downward (black pieces) --> 1
+    const int moveDirection = isColor(piece, White) ? -1 : 1;
+
+    legalMoves.push_back((rank + moveDirection) * 8 + file);
+
+    if(isColor(piece, White) && rank == WHITE_PAWN_STARTING_RANK) {
+        legalMoves.push_back((rank - 2) * 8 + file);
+    } else if(isColor(piece, Black) && rank == BLACK_PAWN_STARTING_RANK) {
+        legalMoves.push_back((rank  + 2) * 8 + file);
+    }
+
+    //TODO: Check for same team piece blocks, opponent piece block, cross capturing, and en passant
+
+    return legalMoves;
+}
+
+
 void Piece::loadPieceTextures() {
     TextureManager::loadTexture(Piece::White | Piece::King, "src/images/pieces/white/K.png");
     TextureManager::loadTexture(Piece::White | Piece::Pawn, "src/images/pieces/white/P.png");

@@ -95,15 +95,30 @@ void Board::releasePiece() {
     const int selectedPiece = board[selectedPieceIndex];
 
     if(selectedPieceIndex != releasedSquareIndex) {
-        board[selectedPieceIndex] = Piece::None;
-        board[releasedSquareIndex] = selectedPiece;
+        //TODO: This should work for all types of pieces!
+        std::vector<int> legalMoves = Piece::getLegalPawnMoves(selectedPiece, selectedPieceIndex);
 
-        colorToMove = colorToMove == Piece::White ? Piece::Black : Piece::White;
+        for(int i{0}; i < legalMoves.size(); i++) {
+            if(releasedSquareIndex == legalMoves.at(i)) {
+                board[selectedPieceIndex] = Piece::None;
+                board[releasedSquareIndex] = selectedPiece;
+
+                colorToMove = colorToMove == Piece::White ? Piece::Black : Piece::White;
+                resetSelectedPiece();
+            }
+        }
+
+    } else {
+        resetSelectedPiece();
     }
 
+}
+
+void Board::resetSelectedPiece() {
     selectedPieceIndex = -1;
     selectedPieceSprite = {};
 }
+
 
 int Board::getHoveredSquareIndex() const {
     const int mousePosX = sf::Mouse::getPosition(m_window).x;

@@ -1,11 +1,17 @@
 #ifndef PIECE_H
 #define PIECE_H
 #include <map>
+#include <iostream>
+#include <vector>
 
 static constexpr int PIECE_TYPE_MASK        = 0b00111;
 static constexpr int PIECE_WHITE_COLOR_MASK = 0b01000;
 static constexpr int PIECE_BLACK_COLOR_MASK = 0b10000;
 static constexpr int PIECE_COLOR_MASK = PIECE_WHITE_COLOR_MASK | PIECE_BLACK_COLOR_MASK;
+
+// Game Constants
+static constexpr int WHITE_PAWN_STARTING_RANK{6};
+static constexpr int BLACK_PAWN_STARTING_RANK{1};
 
 class Piece {
 public:
@@ -26,6 +32,8 @@ public:
 
     static void loadPieceTextures();
     static bool isColor(const int &piece, const int &color);
+
+    static std::vector<int> getLegalPawnMoves(int piece, const int &squareIndex);
 };
 
 #endif //PIECE_H
