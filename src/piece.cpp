@@ -33,13 +33,12 @@ std::vector<int> Piece::getLegalPawnMoves(int piece, const int &squareIndex) {
 
     legalMoves.push_back((rank + moveDirection) * 8 + file);
 
-    if(isColor(piece, White) && rank == WHITE_PAWN_STARTING_RANK) {
-        legalMoves.push_back((rank - 2) * 8 + file);
-    } else if(isColor(piece, Black) && rank == BLACK_PAWN_STARTING_RANK) {
-        legalMoves.push_back((rank  + 2) * 8 + file);
+    if(rank == WHITE_PAWN_STARTING_RANK || rank == BLACK_PAWN_STARTING_RANK) {
+        legalMoves.push_back((rank + (2 * moveDirection)) * 8 + file);
     }
 
     //TODO: Check for same team piece blocks, opponent piece block, cross capturing, and en passant
+
 
     return legalMoves;
 }
