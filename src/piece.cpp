@@ -17,6 +17,10 @@ const std::map<char, int> Piece::pieceCharToValue = {
     { 'q', Piece::Black | Piece::Queen },
 };
 
+bool Piece::isColor(const int &piece, const int &color) {
+    return (piece & PIECE_COLOR_MASK)  == color;
+}
+
 void Piece::loadPieceTextures() {
     TextureManager::loadTexture(Piece::White | Piece::King, "src/images/pieces/white/K.png");
     TextureManager::loadTexture(Piece::White | Piece::Pawn, "src/images/pieces/white/P.png");

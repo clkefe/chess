@@ -3,7 +3,7 @@
 #include "piece.h"
 #include "texture_manager.h"
 
-Board::Board(sf::RenderWindow& window) : m_window{window}, board{} {
+Board::Board(sf::RenderWindow& window) : m_window{window}, board{}, selectedPieceIndex{-1} {
     loadFromFEN("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1");
 }
 
@@ -53,11 +53,57 @@ void Board::drawPieces() {
                 const float pos_x = static_cast<float>(file) * 100;
                 const float pos_y = static_cast<float>(rank) * 100;
 
+                // Skip rendering the selected piece now. It will be rendered last so it is on the top.
+                if(i == selectedPieceIndex) {
+                    selectedPieceSprite = sprite;
+                    continue;
+                }
+
                 sprite.setPosition(pos_x, pos_y);
 
                 m_window.draw(sprite);
             }
         }
+
+        if(selectedPieceIndex != -1) {
+            const float pos_x = static_cast<float>(sf::Mouse::getPosition(m_window).x) - 50;
+            const float pos_y = static_cast<float>(sf::Mouse::getPosition(m_window).y) - 50;
+
+            selectedPieceSprite.setPosition(pos_x, pos_y);
+            m_window.draw(selectedPieceSprite);
+        }
+}
+
+void Board::grabPiece() {
+    const int howeredSquareIndex = getHoveredSquareIndex();
+
+    if(board[howeredSquareIndex] == Piece::None) {
+        return;
+    }
+
+    selectedPieceIndex = howeredSquareIndex;
+}
+
+void Board::releasePiece() {
+    const int howeredSquareIndex = getHoveredSquareIndex();
+
+    const int piece = board[selectedPieceIndex];
+
+    board[selectedPieceIndex] = Piece::None;
+    board[howeredSquareIndex] = piece;
+
+    selectedPieceIndex = -1;
+    selectedPieceSprite = {};
+}
+
+int Board::getHoveredSquareIndex() const {
+    const int mousePosX = sf::Mouse::getPosition(m_window).x;
+    const int mousePosY = sf::Mouse::getPosition(m_window).y;
+
+    const int mouseOnRank = mousePosY / 100;
+    const int mouseOnFile = mousePosX / 100;
+
+    return mouseOnRank * 8 + mouseOnFile;
 }
 
 void Board::loadFromFEN(const std::string &FEN) {

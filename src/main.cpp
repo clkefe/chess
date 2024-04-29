@@ -12,6 +12,15 @@ int main() {
         for (auto event = sf::Event{}; window.pollEvent(event);) {
             if (event.type == sf::Event::Closed) {
                 window.close();
+            } else if (event.type == sf::Event::MouseButtonPressed) {
+                if(event.mouseButton.button == sf::Mouse::Left) {
+                    if(board.selectedPieceIndex != -1) {
+                        board.releasePiece();
+                        continue;
+                    }
+
+                    board.grabPiece();
+                }
             }
         }
 
