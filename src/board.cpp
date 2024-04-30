@@ -39,6 +39,40 @@ void Board::drawBackground() {
     m_window.draw(background);
 }
 
+void Board::drawLegalMovesHighlight() {
+    if(Piece::legalMoves.empty()) {
+        return;
+    }
+
+    const int numberOfVertex = Piece::legalMoves.size() * 4;
+    sf::VertexArray highlights(sf::Quads, numberOfVertex);
+
+    for(int i = 0; i < Piece::legalMoves.size(); ++i) {
+        int legalMove = Piece::legalMoves[i];
+        const int rank = legalMove / 8;
+        const int file = legalMove % 8;
+
+        const float pos_x = static_cast<float>(file) * 100;
+        const float pos_y = static_cast<float>(rank) * 100;
+
+        int startingIndex = i * 4;
+
+        highlights[startingIndex].position     = sf::Vector2f(pos_x + 25, pos_y + 75); // left-bottom
+        highlights[startingIndex + 1].position = sf::Vector2f(pos_x + 25, pos_y + 25); // left-top
+        highlights[startingIndex + 2].position = sf::Vector2f(pos_x + 75, pos_y + 25); // right-top
+        highlights[startingIndex + 3].position = sf::Vector2f(pos_x + 75, pos_y + 75); // right-bottom
+
+        for(int j = 0; j < 4; j++) {
+            highlights[startingIndex + j].color = sf::Color(0, 230, 250, 120);
+
+        }
+    }
+
+
+    m_window.draw(highlights);
+}
+
+
 void Board::drawPieces() {
         for(int i = 0; i < 64; i++) {
             if(board[i] != Piece::None) {
@@ -87,11 +121,11 @@ void Board::grabPiece() {
     }
 
     selectedPieceIndex = howeredSquareIndex;
+    Piece::generateLegalPawnMoves(selectedPiece, selectedPieceIndex, board);
 }
 
 void Board::releasePiece() {
     const int releasedSquareIndex = getHoveredSquareIndex();
-
     const int selectedPiece = board[selectedPieceIndex];
 
     if(selectedPieceIndex == releasedSquareIndex) {
@@ -100,10 +134,8 @@ void Board::releasePiece() {
     }
 
     //TODO: This should work for all types of pieces!
-    const std::vector<int> legalMoves = Piece::getLegalPawnMoves(selectedPiece, selectedPieceIndex, board);
-
-    for(int i{0}; i < legalMoves.size(); i++) {
-        if(releasedSquareIndex == legalMoves.at(i)) {
+    for(int i{0}; i < Piece::legalMoves.size(); i++) {
+        if(releasedSquareIndex == Piece::legalMoves.at(i)) {
             board[selectedPieceIndex] = Piece::None;
             board[releasedSquareIndex] = selectedPiece;
 
@@ -116,6 +148,7 @@ void Board::releasePiece() {
 void Board::resetSelectedPiece() {
     selectedPieceIndex = -1;
     selectedPieceSprite = {};
+    Piece::legalMoves.clear();
 }
 
 int Board::getHoveredSquareIndex() const {

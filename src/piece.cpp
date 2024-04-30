@@ -17,6 +17,8 @@ const std::map<char, int> Piece::pieceCharToValue = {
     { 'q', Piece::Black | Piece::Queen },
 };
 
+std::vector<int> Piece::legalMoves{};
+
 bool Piece::isColor(const int &piece, const int &color) {
     return (piece & PIECE_COLOR_MASK)  == color;
 }
@@ -25,8 +27,8 @@ bool Piece::getColor(const int &piece) {
     return (piece & PIECE_COLOR_MASK);
 }
 
-std::vector<int> Piece::getLegalPawnMoves(int piece, const int &squareIndex, const int board[]) {
-    std::vector<int> legalMoves;
+std::vector<int> Piece::generateLegalPawnMoves(int piece, const int &squareIndex, const int board[]) {
+    legalMoves.clear();
 
     const int rank = squareIndex / 8;
     const int file = squareIndex % 8;

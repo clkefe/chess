@@ -32,11 +32,14 @@ public:
 
     static const std::map<char, int> pieceCharToValue;
 
+    static std::vector<int> legalMoves;
+
     static void loadPieceTextures();
     static bool isColor(const int &piece, const int &color);
     static bool getColor(const int &piece);
 
-    static std::vector<int> getLegalPawnMoves(int piece, const int &squareIndex, const int board[]);
+
+    static std::vector<int> generateLegalPawnMoves(int piece, const int &squareIndex, const int board[]);
 };
 
 #endif //PIECE_H

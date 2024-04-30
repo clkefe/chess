@@ -21,6 +21,7 @@ public:
     explicit Board(sf::RenderWindow &window);
 
     void drawBackground();
+    void drawLegalMovesHighlight();
     void drawPieces();
 
     void grabPiece();

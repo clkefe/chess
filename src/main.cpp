@@ -17,6 +17,7 @@ int main() {
         window.clear();
 
         board.drawBackground();
+        board.drawLegalMovesHighlight();
         board.drawPieces();
 
         window.display();
