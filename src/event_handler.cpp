@@ -31,7 +31,6 @@ void EventHandler::onMouseClick(const sf::Event &event) const {
             }
             break;
         case sf::Mouse::Right:
-            std::cout << "RIGHT\n";
             m_board.resetSelectedPiece();
             break;
         default:
