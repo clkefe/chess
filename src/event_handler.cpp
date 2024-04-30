@@ -27,7 +27,7 @@ void EventHandler::onMouseClick(const sf::Event &event) const {
             if(m_board.selectedPieceIndex == -1) {
                 m_board.grabPiece();
             } else {
-                m_board.releasePiece();
+                m_board.placePiece();
             }
             break;
         case sf::Mouse::Right:

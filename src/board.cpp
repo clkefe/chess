@@ -124,7 +124,7 @@ void Board::grabPiece() {
     Piece::generateLegalPawnMoves(selectedPiece, selectedPieceIndex, board);
 }
 
-void Board::releasePiece() {
+void Board::placePiece() {
     const int releasedSquareIndex = getHoveredSquareIndex();
     const int selectedPiece = board[selectedPieceIndex];
 

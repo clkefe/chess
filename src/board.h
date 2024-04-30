@@ -25,7 +25,7 @@ public:
     void drawPieces();
 
     void grabPiece();
-    void releasePiece();
+    void placePiece();
     void resetSelectedPiece();
 
     int getHoveredSquareIndex() const;
