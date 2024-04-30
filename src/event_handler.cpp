@@ -22,11 +22,19 @@ void EventHandler::onClose() const {
 }
 
 void EventHandler::onMouseClick(const sf::Event &event) const {
-    if(event.mouseButton.button == sf::Mouse::Left) {
-        if(m_board.selectedPieceIndex == -1) {
-            m_board.grabPiece();
-        } else {
-            m_board.releasePiece();
-        }
+    switch (event.mouseButton.button) {
+        case sf::Mouse::Left:
+            if(m_board.selectedPieceIndex == -1) {
+                m_board.grabPiece();
+            } else {
+                m_board.releasePiece();
+            }
+            break;
+        case sf::Mouse::Right:
+            std::cout << "RIGHT\n";
+            m_board.resetSelectedPiece();
+            break;
+        default:
+            break;
     }
 }
