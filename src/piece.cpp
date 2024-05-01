@@ -63,7 +63,7 @@ std::vector<int> Piece::generateLegalPawnMoves(int piece, const int &squareIndex
         legalMoves.push_back(rightCapture);
     }
 
-    // TODO: Check for cross capturing, and en passant
+    // TODO: Check for en passant
 
     return legalMoves;
 }
