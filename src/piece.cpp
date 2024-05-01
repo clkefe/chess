@@ -40,16 +40,28 @@ std::vector<int> Piece::generateLegalPawnMoves(int piece, const int &squareIndex
     const bool isPawnOnStartingRank = rank == WHITE_PAWN_STARTING_RANK || rank == BLACK_PAWN_STARTING_RANK;
     const int numberOfForwardMoves = isPawnOnStartingRank ? 2 : 1;
 
-    for(int i = 1; i <= numberOfForwardMoves; i++) {
-        const int moveSquare = (rank + (i * moveDirection) ) * 8 + file;
 
-        if(board[moveSquare] != None) {
+    // Forward Pawn Moves
+    for(int i = 1; i <= numberOfForwardMoves; i++) {
+        const int targetSquareIndex = (rank + (i * moveDirection) ) * 8 + file;
+
+        if(board[targetSquareIndex] != None) {
             break;
         }
 
-        legalMoves.push_back(moveSquare);
+        legalMoves.push_back(targetSquareIndex);
     }
 
+    // Capturing moves to the left and right
+    const int leftCapture = (rank + moveDirection) * 8 + file - 1;
+    const int rightCapture = (rank + moveDirection) * 8 + file + 1;
+
+    if (file > 0 && board[leftCapture] != None && !isColor(board[leftCapture], piece & PIECE_COLOR_MASK)) {
+        legalMoves.push_back(leftCapture);
+    }
+    if (file < 7 && board[rightCapture] != None && !isColor(board[rightCapture], piece & PIECE_COLOR_MASK)) {
+        legalMoves.push_back(rightCapture);
+    }
 
     // TODO: Check for cross capturing, and en passant
 
