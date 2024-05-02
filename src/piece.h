@@ -36,10 +36,14 @@ public:
 
     static void loadPieceTextures();
     static bool isColor(const int &piece, const int &color);
-    static bool getColor(const int &piece);
+    static int getColor(const int &piece);
+    static int getType(const int &piece);
 
+    static void generateMoves(int piece, const int& squareIndex, const int board[]);
+    static void generatePawnMoves(int piece, int rank, int file, const int board[]);
+    static void generateRookMoves(int piece, int rank, int file, const int board[]);
 
-    static std::vector<int> generateLegalPawnMoves(int piece, const int &squareIndex, const int board[]);
+    static void generateSlidingMoves(int piece, int rank, int file, bool isVertical, const int board[]);
 };
 
 #endif //PIECE_H

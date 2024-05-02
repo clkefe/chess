@@ -23,23 +23,41 @@ bool Piece::isColor(const int &piece, const int &color) {
     return (piece & PIECE_COLOR_MASK)  == color;
 }
 
-bool Piece::getColor(const int &piece) {
+int Piece::getColor(const int &piece) {
     return (piece & PIECE_COLOR_MASK);
 }
 
-std::vector<int> Piece::generateLegalPawnMoves(int piece, const int &squareIndex, const int board[]) {
+int Piece::getType(const int &piece) {
+    return piece & PIECE_TYPE_MASK;
+}
+
+void Piece::generateMoves(int piece, const int &squareIndex, const int board[]) {
     legalMoves.clear();
 
     const int rank = squareIndex / 8;
     const int file = squareIndex % 8;
 
+    switch (getType(piece)) {
+        case Pawn:
+            generatePawnMoves(piece, rank, file, board);
+            break;
+        case Rook:
+            generateRookMoves(piece, rank, file, board);
+            break;
+        default:
+            break;
+    }
+}
+
+
+void Piece::generatePawnMoves(const int piece, const int rank, const int file, const int board[]) {
     // Moves upward (white pieces) --> -1
     // Moves downward (black pieces) --> 1
     const int moveDirection = isColor(piece, White) ? -1 : 1;
 
+    // Pawns can move 2 ranks above/below if they haven't moved yet.
     const bool isPawnOnStartingRank = rank == WHITE_PAWN_STARTING_RANK || rank == BLACK_PAWN_STARTING_RANK;
     const int numberOfForwardMoves = isPawnOnStartingRank ? 2 : 1;
-
 
     // Forward Pawn Moves
     for(int i = 1; i <= numberOfForwardMoves; i++) {
@@ -52,22 +70,60 @@ std::vector<int> Piece::generateLegalPawnMoves(int piece, const int &squareIndex
         legalMoves.push_back(targetSquareIndex);
     }
 
+    // TODO: Remove the error that allows players to capture their own pieces :D
     // Capturing moves to the left and right
     const int leftCapture = (rank + moveDirection) * 8 + file - 1;
     const int rightCapture = (rank + moveDirection) * 8 + file + 1;
 
-    if (file > 0 && board[leftCapture] != None && !isColor(board[leftCapture], piece & PIECE_COLOR_MASK)) {
+    if (file > 0 && board[leftCapture] != None && !isColor(board[leftCapture], getColor(piece))) {
         legalMoves.push_back(leftCapture);
     }
-    if (file < 7 && board[rightCapture] != None && !isColor(board[rightCapture], piece & PIECE_COLOR_MASK)) {
+
+    if (file < 7 && board[rightCapture] != None && !isColor(board[rightCapture], getColor(piece))) {
         legalMoves.push_back(rightCapture);
     }
 
     // TODO: Check for en passant
-
-    return legalMoves;
 }
 
+
+void Piece::generateRookMoves(int piece, int rank, int file, const int board[]) {
+    generateSlidingMoves(piece, rank, file, true, board);
+    generateSlidingMoves(piece, rank, file, false, board);
+}
+
+void Piece::generateSlidingMoves(const int piece, const int rank, const int file, const bool isVertical, const int board[]) {
+    for(int i = -1; i <= 1; i += 2) {
+        const int startIndex = isVertical ? rank : file;
+        const int endIndex = i > 0 ? 8 : -1;
+
+        for(int k = startIndex; k != endIndex; k += i) {
+            int targetSquareIndex;
+
+            if(isVertical) {
+                targetSquareIndex = k * 8 + file;
+            } else {
+                targetSquareIndex = rank * 8 + k;
+            }
+
+            const int pieceOnTargetSquare = board[targetSquareIndex];
+
+            if(rank * 8 + file == targetSquareIndex) {
+                continue;
+            }
+
+            if(pieceOnTargetSquare == None) {
+                legalMoves.push_back(targetSquareIndex);
+            } else {
+                if(!isColor(pieceOnTargetSquare, getColor(piece))) {
+                    legalMoves.push_back(targetSquareIndex);
+                }
+
+                break;
+            }
+        }
+    }
+}
 
 void Piece::loadPieceTextures() {
     TextureManager::loadTexture(Piece::White | Piece::King, "src/images/pieces/white/K.png");

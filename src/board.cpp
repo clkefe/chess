@@ -121,7 +121,7 @@ void Board::grabPiece() {
     }
 
     selectedPieceIndex = howeredSquareIndex;
-    Piece::generateLegalPawnMoves(selectedPiece, selectedPieceIndex, board);
+    Piece::generateMoves(selectedPiece, selectedPieceIndex, board);
 }
 
 void Board::placePiece() {
@@ -133,7 +133,6 @@ void Board::placePiece() {
         return;
     }
 
-    //TODO: This should work for all types of pieces!
     for(int i{0}; i < Piece::legalMoves.size(); i++) {
         if(releasedSquareIndex == Piece::legalMoves.at(i)) {
             board[selectedPieceIndex] = Piece::None;
