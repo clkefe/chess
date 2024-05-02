@@ -70,7 +70,6 @@ void Piece::generatePawnMoves(const int piece, const int rank, const int file, c
         legalMoves.push_back(targetSquareIndex);
     }
 
-    // TODO: Remove the error that allows players to capture their own pieces :D
     // Capturing moves to the left and right
     const int leftCapture = (rank + moveDirection) * 8 + file - 1;
     const int rightCapture = (rank + moveDirection) * 8 + file + 1;
