@@ -44,6 +44,9 @@ void Piece::generateMoves(int piece, const int &squareIndex, const int board[]) 
         case Rook:
             generateRookMoves(piece, rank, file, board);
             break;
+        case Bishop:
+            generateBishopMoves(piece, rank, file, board);
+            break;
         default:
             break;
     }
@@ -85,13 +88,17 @@ void Piece::generatePawnMoves(const int piece, const int rank, const int file, c
     // TODO: Check for en passant
 }
 
-
-void Piece::generateRookMoves(int piece, int rank, int file, const int board[]) {
-    generateSlidingMoves(piece, rank, file, true, board);
-    generateSlidingMoves(piece, rank, file, false, board);
+void Piece::generateRookMoves(const int piece, const int rank, const int file, const int board[]) {
+    generateLinearSlidingMoves(piece, rank, file, true, board);
+    generateLinearSlidingMoves(piece, rank, file, false, board);
 }
 
-void Piece::generateSlidingMoves(const int piece, const int rank, const int file, const bool isVertical, const int board[]) {
+void Piece::generateBishopMoves(const int piece, const int rank, const int file, const int board[]) {
+    generateDiagonalSlidingMoves(piece, rank, file, true, board);
+    generateDiagonalSlidingMoves(piece, rank, file, false, board);
+}
+
+void Piece::generateLinearSlidingMoves(const int piece, const int rank, const int file, const bool isVertical, const int board[]) {
     for(int i = -1; i <= 1; i += 2) {
         const int startIndex = isVertical ? rank : file;
         const int endIndex = i > 0 ? 8 : -1;
@@ -123,6 +130,32 @@ void Piece::generateSlidingMoves(const int piece, const int rank, const int file
         }
     }
 }
+
+void Piece::generateDiagonalSlidingMoves(const int piece, const int rank, const int file, const bool isLeftDirection, const int board[]) {
+    for(int direction = -1; direction <= 1; direction+=2) {
+        const int step = isLeftDirection ? 9 : 7;
+        const int startIndex = rank * 8 + file;
+        const int endIndex = direction > 0 ? 64 : -1;
+
+        for(int targetSquareIndex = startIndex; targetSquareIndex != endIndex; targetSquareIndex += (step * direction)) {
+            const int newFile = targetSquareIndex % 8;
+            const int newRank = targetSquareIndex / 8;
+
+            if(rank * 8 + file == targetSquareIndex) {
+                continue;
+            }
+
+
+            legalMoves.push_back(targetSquareIndex);
+
+            if(newFile == 7 || newFile == 0 || newRank == 7 || newRank == 0) {
+                break;
+            }
+        }
+    }
+
+}
+
 
 void Piece::loadPieceTextures() {
     TextureManager::loadTexture(Piece::White | Piece::King, "src/images/pieces/white/K.png");

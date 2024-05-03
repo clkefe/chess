@@ -42,8 +42,10 @@ public:
     static void generateMoves(int piece, const int& squareIndex, const int board[]);
     static void generatePawnMoves(int piece, int rank, int file, const int board[]);
     static void generateRookMoves(int piece, int rank, int file, const int board[]);
+    static void generateBishopMoves(int piece, int rank, int file, const int board[]);
 
-    static void generateSlidingMoves(int piece, int rank, int file, bool isVertical, const int board[]);
+    static void generateLinearSlidingMoves(int piece, int rank, int file, bool isVertical, const int board[]);
+    static void generateDiagonalSlidingMoves(int piece, int rank, int file,  bool isLeftDirection, const int board[]);
 };
 
 #endif //PIECE_H
