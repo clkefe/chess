@@ -47,11 +47,12 @@ void Piece::generateMoves(int piece, const int &squareIndex, const int board[]) 
         case Bishop:
             generateBishopMoves(piece, rank, file, board);
             break;
+        case Queen:
+            generateQueenMoves(piece, rank, file, board);
         default:
             break;
     }
 }
-
 
 void Piece::generatePawnMoves(const int piece, const int rank, const int file, const int board[]) {
     // Moves upward (white pieces) --> -1
@@ -94,6 +95,12 @@ void Piece::generateRookMoves(const int piece, const int rank, const int file, c
 }
 
 void Piece::generateBishopMoves(const int piece, const int rank, const int file, const int board[]) {
+    generateDiagonalSlidingMoves(piece, rank, file, board);
+}
+
+void Piece::generateQueenMoves(int piece, int rank, int file, const int board[]) {
+    generateLinearSlidingMoves(piece, rank, file, true, board);
+    generateLinearSlidingMoves(piece, rank, file, false, board);
     generateDiagonalSlidingMoves(piece, rank, file, board);
 }
 
@@ -163,7 +170,6 @@ void Piece::generateDiagonalSlidingMoves(const int piece, const int rank, const 
         }
     }
 }
-
 
 void Piece::loadPieceTextures() {
     TextureManager::loadTexture(Piece::White | Piece::King, "src/images/pieces/white/K.png");
