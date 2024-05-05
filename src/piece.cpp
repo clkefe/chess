@@ -95,7 +95,6 @@ void Piece::generateRookMoves(const int piece, const int rank, const int file, c
 
 void Piece::generateBishopMoves(const int piece, const int rank, const int file, const int board[]) {
     generateDiagonalSlidingMoves(piece, rank, file, true, board);
-    generateDiagonalSlidingMoves(piece, rank, file, false, board);
 }
 
 void Piece::generateLinearSlidingMoves(const int piece, const int rank, const int file, const bool isVertical, const int board[]) {
@@ -132,28 +131,38 @@ void Piece::generateLinearSlidingMoves(const int piece, const int rank, const in
 }
 
 void Piece::generateDiagonalSlidingMoves(const int piece, const int rank, const int file, const bool isLeftDirection, const int board[]) {
-    for(int direction = -1; direction <= 1; direction+=2) {
-        const int step = isLeftDirection ? 9 : 7;
-        const int startIndex = rank * 8 + file;
-        const int endIndex = direction > 0 ? 64 : -1;
 
-        for(int targetSquareIndex = startIndex; targetSquareIndex != endIndex; targetSquareIndex += (step * direction)) {
-            const int newFile = targetSquareIndex % 8;
-            const int newRank = targetSquareIndex / 8;
+    int newFile = {file};
+    int newRank = {rank};
 
-            if(rank * 8 + file == targetSquareIndex) {
-                continue;
+    for(int rankMultiplier = -1; rankMultiplier <= 1; rankMultiplier += 2) {
+        for(int fileMultiplier = -1; fileMultiplier <= 1; fileMultiplier += 2) {
+            while(true) {
+                newFile = newFile + fileMultiplier;
+                newRank = newRank - rankMultiplier;
+
+                if(newFile < 0 || newFile > 7 || newRank < 0 || newRank > 7) {
+                    break;
+                }
+
+                const int targetSquareIndex = newRank * 8 + newFile;
+                const int pieceOnTargetSquare = board[targetSquareIndex];
+
+                if(pieceOnTargetSquare == None) {
+                    legalMoves.push_back(targetSquareIndex);
+                } else {
+                    if(!isColor(pieceOnTargetSquare, getColor(piece))) {
+                        legalMoves.push_back(targetSquareIndex);
+                    }
+
+                    break;
+                }
             }
 
-
-            legalMoves.push_back(targetSquareIndex);
-
-            if(newFile == 7 || newFile == 0 || newRank == 7 || newRank == 0) {
-                break;
-            }
+            newFile = {file};
+            newRank = {rank};
         }
     }
-
 }
 
 
