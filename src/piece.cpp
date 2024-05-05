@@ -52,6 +52,10 @@ void Piece::generateMoves(int piece, const int &squareIndex, const int board[]) 
             break;
         case Queen:
             generateQueenMoves(piece, rank, file, board);
+            break;
+        case King:
+            generateKingMoves(piece, rank, file, board);
+            break;
         default:
             break;
     }
@@ -134,6 +138,28 @@ void Piece::generateQueenMoves(int piece, int rank, int file, const int board[])
     generateLinearSlidingMoves(piece, rank, file, true, board);
     generateLinearSlidingMoves(piece, rank, file, false, board);
     generateDiagonalSlidingMoves(piece, rank, file, board);
+}
+
+void Piece::generateKingMoves(int piece, int rank, int file, const int board[]) {
+    for(int i = -1; i <= 1; i++) {
+        for(int j = -1; j <= 1; j++) {
+            const int newFile = file + i;
+            const int newRank = rank + j;
+
+            if(newFile < 0 || newFile > 7 || newRank < 0 || newRank > 7) {
+                continue;
+            }
+
+            const int targetSquareIndex = newRank * 8 + newFile;
+            const int pieceOnTargetSquare = board[targetSquareIndex];
+
+            if(isColor(pieceOnTargetSquare, getColor(piece))) {
+                continue;
+            }
+
+            legalMoves.push_back(targetSquareIndex);
+        }
+    }
 }
 
 void Piece::generateLinearSlidingMoves(const int piece, const int rank, const int file, const bool isVertical, const int board[]) {

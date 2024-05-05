@@ -45,6 +45,7 @@ public:
     static void generateBishopMoves(int piece, int rank, int file, const int board[]);
     static void generateQueenMoves(int piece, int rank, int file, const int board[]);
     static void generateKnightMoves(int piece, int rank, int file, const int board[]);
+    static void generateKingMoves(int piece, int rank, int file, const int board[]);
 
     static void generateLinearSlidingMoves(int piece, int rank, int file, bool isVertical, const int board[]);
     static void generateDiagonalSlidingMoves(int piece, int rank, int file, const int board[]);
