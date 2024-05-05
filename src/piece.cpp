@@ -47,6 +47,9 @@ void Piece::generateMoves(int piece, const int &squareIndex, const int board[]) 
         case Bishop:
             generateBishopMoves(piece, rank, file, board);
             break;
+        case Knight:
+            generateKnightMoves(piece, rank, file, board);
+            break;
         case Queen:
             generateQueenMoves(piece, rank, file, board);
         default:
@@ -96,6 +99,35 @@ void Piece::generateRookMoves(const int piece, const int rank, const int file, c
 
 void Piece::generateBishopMoves(const int piece, const int rank, const int file, const int board[]) {
     generateDiagonalSlidingMoves(piece, rank, file, board);
+}
+
+void Piece::generateKnightMoves(int piece, int rank, int file, const int board[]) {
+    for(int direction = 0; direction < 2; direction++) {
+        const int rankMulConstant = direction == 0 ? 2 : 1;
+        const int fileMulConstant = direction == 0 ? 1 : 2;
+
+        for(int rankMultiplier = -rankMulConstant; rankMultiplier <= rankMulConstant; rankMultiplier += rankMulConstant * 2) {
+            for(int fileMultiplier = -fileMulConstant; fileMultiplier <= fileMulConstant; fileMultiplier += fileMulConstant * 2) {
+                const int newFile = file + fileMultiplier;
+                const int newRank = rank + rankMultiplier;
+
+                if(newFile < 0 || newFile > 7 || newRank < 0 || newRank > 7) {
+                    continue;
+                }
+
+                const int targetSquareIndex = newRank * 8 + newFile;
+                const int pieceOnTargetSquare = board[targetSquareIndex];
+
+                if(pieceOnTargetSquare == None) {
+                    legalMoves.push_back(targetSquareIndex);
+                } else {
+                    if(!isColor(pieceOnTargetSquare, getColor(piece))) {
+                        legalMoves.push_back(targetSquareIndex);
+                    }
+                }
+            }
+        }
+    }
 }
 
 void Piece::generateQueenMoves(int piece, int rank, int file, const int board[]) {
