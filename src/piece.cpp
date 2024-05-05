@@ -130,8 +130,7 @@ void Piece::generateLinearSlidingMoves(const int piece, const int rank, const in
     }
 }
 
-void Piece::generateDiagonalSlidingMoves(const int piece, const int rank, const int file, const bool isLeftDirection, const int board[]) {
-
+void Piece::generateDiagonalSlidingMoves(const int piece, const int rank, const int file, const int board[]) {
     int newFile = {file};
     int newRank = {rank};
 

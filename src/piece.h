@@ -45,7 +45,7 @@ public:
     static void generateBishopMoves(int piece, int rank, int file, const int board[]);
 
     static void generateLinearSlidingMoves(int piece, int rank, int file, bool isVertical, const int board[]);
-    static void generateDiagonalSlidingMoves(int piece, int rank, int file,  bool isLeftDirection, const int board[]);
+    static void generateDiagonalSlidingMoves(int piece, int rank, int file, const int board[]);
 };
 
 #endif //PIECE_H
