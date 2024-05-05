@@ -94,7 +94,7 @@ void Piece::generateRookMoves(const int piece, const int rank, const int file, c
 }
 
 void Piece::generateBishopMoves(const int piece, const int rank, const int file, const int board[]) {
-    generateDiagonalSlidingMoves(piece, rank, file, true, board);
+    generateDiagonalSlidingMoves(piece, rank, file, board);
 }
 
 void Piece::generateLinearSlidingMoves(const int piece, const int rank, const int file, const bool isVertical, const int board[]) {
