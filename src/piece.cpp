@@ -2,25 +2,25 @@
 #include "texture_manager.h"
 
 const std::map<char, int> Piece::pieceCharToValue = {
-    { 'K', Piece::White | Piece::King },
-    { 'P', Piece::White | Piece::Pawn },
-    { 'N', Piece::White | Piece::Knight },
-    { 'B', Piece::White | Piece::Bishop },
-    { 'R', Piece::White | Piece::Rook },
-    { 'Q', Piece::White | Piece::Queen },
+    {'K', White | King},
+    {'P', White | Pawn},
+    {'N', White | Knight},
+    {'B', White | Bishop},
+    {'R', White | Rook},
+    {'Q', White | Queen},
 
-    { 'k', Piece::Black | Piece::King },
-    { 'p', Piece::Black | Piece::Pawn },
-    { 'n', Piece::Black | Piece::Knight },
-    { 'b', Piece::Black | Piece::Bishop },
-    { 'r', Piece::Black | Piece::Rook },
-    { 'q', Piece::Black | Piece::Queen },
+    {'k', Black | King},
+    {'p', Black | Pawn},
+    {'n', Black | Knight},
+    {'b', Black | Bishop},
+    {'r', Black | Rook},
+    {'q', Black | Queen},
 };
 
 std::vector<int> Piece::legalMoves{};
 
 bool Piece::isColor(const int &piece, const int &color) {
-    return (piece & PIECE_COLOR_MASK)  == color;
+    return (piece & PIECE_COLOR_MASK) == color;
 }
 
 int Piece::getColor(const int &piece) {
@@ -71,10 +71,10 @@ void Piece::generatePawnMoves(const int piece, const int rank, const int file, c
     const int numberOfForwardMoves = isPawnOnStartingRank ? 2 : 1;
 
     // Forward Pawn Moves
-    for(int i = 1; i <= numberOfForwardMoves; i++) {
-        const int targetSquareIndex = (rank + (i * moveDirection) ) * 8 + file;
+    for (int i = 1; i <= numberOfForwardMoves; i++) {
+        const int targetSquareIndex = (rank + (i * moveDirection)) * 8 + file;
 
-        if(board[targetSquareIndex] != None) {
+        if (board[targetSquareIndex] != None) {
             break;
         }
 
@@ -106,26 +106,28 @@ void Piece::generateBishopMoves(const int piece, const int rank, const int file,
 }
 
 void Piece::generateKnightMoves(int piece, int rank, int file, const int board[]) {
-    for(int direction = 0; direction < 2; direction++) {
+    for (int direction = 0; direction < 2; direction++) {
         const int rankMulConstant = direction == 0 ? 2 : 1;
         const int fileMulConstant = direction == 0 ? 1 : 2;
 
-        for(int rankMultiplier = -rankMulConstant; rankMultiplier <= rankMulConstant; rankMultiplier += rankMulConstant * 2) {
-            for(int fileMultiplier = -fileMulConstant; fileMultiplier <= fileMulConstant; fileMultiplier += fileMulConstant * 2) {
+        for (int rankMultiplier = -rankMulConstant; rankMultiplier <= rankMulConstant;
+             rankMultiplier += rankMulConstant * 2) {
+            for (int fileMultiplier = -fileMulConstant; fileMultiplier <= fileMulConstant;
+                 fileMultiplier += fileMulConstant * 2) {
                 const int newFile = file + fileMultiplier;
                 const int newRank = rank + rankMultiplier;
 
-                if(newFile < 0 || newFile > 7 || newRank < 0 || newRank > 7) {
+                if (newFile < 0 || newFile > 7 || newRank < 0 || newRank > 7) {
                     continue;
                 }
 
                 const int targetSquareIndex = newRank * 8 + newFile;
                 const int pieceOnTargetSquare = board[targetSquareIndex];
 
-                if(pieceOnTargetSquare == None) {
+                if (pieceOnTargetSquare == None) {
                     legalMoves.push_back(targetSquareIndex);
                 } else {
-                    if(!isColor(pieceOnTargetSquare, getColor(piece))) {
+                    if (!isColor(pieceOnTargetSquare, getColor(piece))) {
                         legalMoves.push_back(targetSquareIndex);
                     }
                 }
@@ -141,19 +143,19 @@ void Piece::generateQueenMoves(int piece, int rank, int file, const int board[])
 }
 
 void Piece::generateKingMoves(int piece, int rank, int file, const int board[]) {
-    for(int i = -1; i <= 1; i++) {
-        for(int j = -1; j <= 1; j++) {
+    for (int i = -1; i <= 1; i++) {
+        for (int j = -1; j <= 1; j++) {
             const int newFile = file + i;
             const int newRank = rank + j;
 
-            if(newFile < 0 || newFile > 7 || newRank < 0 || newRank > 7) {
+            if (newFile < 0 || newFile > 7 || newRank < 0 || newRank > 7) {
                 continue;
             }
 
             const int targetSquareIndex = newRank * 8 + newFile;
             const int pieceOnTargetSquare = board[targetSquareIndex];
 
-            if(isColor(pieceOnTargetSquare, getColor(piece))) {
+            if (isColor(pieceOnTargetSquare, getColor(piece))) {
                 continue;
             }
 
@@ -162,15 +164,16 @@ void Piece::generateKingMoves(int piece, int rank, int file, const int board[]) 
     }
 }
 
-void Piece::generateLinearSlidingMoves(const int piece, const int rank, const int file, const bool isVertical, const int board[]) {
-    for(int i = -1; i <= 1; i += 2) {
+void Piece::generateLinearSlidingMoves(const int piece, const int rank, const int file, const bool isVertical,
+                                       const int board[]) {
+    for (int i = -1; i <= 1; i += 2) {
         const int startIndex = isVertical ? rank : file;
         const int endIndex = i > 0 ? 8 : -1;
 
-        for(int k = startIndex; k != endIndex; k += i) {
+        for (int k = startIndex; k != endIndex; k += i) {
             int targetSquareIndex;
 
-            if(isVertical) {
+            if (isVertical) {
                 targetSquareIndex = k * 8 + file;
             } else {
                 targetSquareIndex = rank * 8 + k;
@@ -178,14 +181,14 @@ void Piece::generateLinearSlidingMoves(const int piece, const int rank, const in
 
             const int pieceOnTargetSquare = board[targetSquareIndex];
 
-            if(rank * 8 + file == targetSquareIndex) {
+            if (rank * 8 + file == targetSquareIndex) {
                 continue;
             }
 
-            if(pieceOnTargetSquare == None) {
+            if (pieceOnTargetSquare == None) {
                 legalMoves.push_back(targetSquareIndex);
             } else {
-                if(!isColor(pieceOnTargetSquare, getColor(piece))) {
+                if (!isColor(pieceOnTargetSquare, getColor(piece))) {
                     legalMoves.push_back(targetSquareIndex);
                 }
 
@@ -199,23 +202,23 @@ void Piece::generateDiagonalSlidingMoves(const int piece, const int rank, const 
     int newFile = {file};
     int newRank = {rank};
 
-    for(int rankMultiplier = -1; rankMultiplier <= 1; rankMultiplier += 2) {
-        for(int fileMultiplier = -1; fileMultiplier <= 1; fileMultiplier += 2) {
-            while(true) {
+    for (int rankMultiplier = -1; rankMultiplier <= 1; rankMultiplier += 2) {
+        for (int fileMultiplier = -1; fileMultiplier <= 1; fileMultiplier += 2) {
+            while (true) {
                 newFile = newFile + fileMultiplier;
                 newRank = newRank - rankMultiplier;
 
-                if(newFile < 0 || newFile > 7 || newRank < 0 || newRank > 7) {
+                if (newFile < 0 || newFile > 7 || newRank < 0 || newRank > 7) {
                     break;
                 }
 
                 const int targetSquareIndex = newRank * 8 + newFile;
                 const int pieceOnTargetSquare = board[targetSquareIndex];
 
-                if(pieceOnTargetSquare == None) {
+                if (pieceOnTargetSquare == None) {
                     legalMoves.push_back(targetSquareIndex);
                 } else {
-                    if(!isColor(pieceOnTargetSquare, getColor(piece))) {
+                    if (!isColor(pieceOnTargetSquare, getColor(piece))) {
                         legalMoves.push_back(targetSquareIndex);
                     }
 
@@ -230,17 +233,17 @@ void Piece::generateDiagonalSlidingMoves(const int piece, const int rank, const 
 }
 
 void Piece::loadPieceTextures() {
-    TextureManager::loadTexture(Piece::White | Piece::King, "src/images/pieces/white/K.png");
-    TextureManager::loadTexture(Piece::White | Piece::Pawn, "src/images/pieces/white/P.png");
-    TextureManager::loadTexture(Piece::White | Piece::Knight, "src/images/pieces/white/N.png");
-    TextureManager::loadTexture(Piece::White | Piece::Bishop, "src/images/pieces/white/B.png");
-    TextureManager::loadTexture(Piece::White | Piece::Rook, "src/images/pieces/white/R.png");
-    TextureManager::loadTexture(Piece::White | Piece::Queen, "src/images/pieces/white/Q.png");
+    TextureManager::loadTexture(White | King, "src/images/pieces/white/K.png");
+    TextureManager::loadTexture(White | Pawn, "src/images/pieces/white/P.png");
+    TextureManager::loadTexture(White | Knight, "src/images/pieces/white/N.png");
+    TextureManager::loadTexture(White | Bishop, "src/images/pieces/white/B.png");
+    TextureManager::loadTexture(White | Rook, "src/images/pieces/white/R.png");
+    TextureManager::loadTexture(White | Queen, "src/images/pieces/white/Q.png");
 
-    TextureManager::loadTexture(Piece::Black | Piece::King, "src/images/pieces/black/k.png");
-    TextureManager::loadTexture(Piece::Black | Piece::Pawn, "src/images/pieces/black/p.png");
-    TextureManager::loadTexture(Piece::Black | Piece::Knight, "src/images/pieces/black/n.png");
-    TextureManager::loadTexture(Piece::Black | Piece::Bishop, "src/images/pieces/black/b.png");
-    TextureManager::loadTexture(Piece::Black | Piece::Rook, "src/images/pieces/black/r.png");
-    TextureManager::loadTexture(Piece::Black | Piece::Queen, "src/images/pieces/black/q.png");
+    TextureManager::loadTexture(Black | King, "src/images/pieces/black/k.png");
+    TextureManager::loadTexture(Black | Pawn, "src/images/pieces/black/p.png");
+    TextureManager::loadTexture(Black | Knight, "src/images/pieces/black/n.png");
+    TextureManager::loadTexture(Black | Bishop, "src/images/pieces/black/b.png");
+    TextureManager::loadTexture(Black | Rook, "src/images/pieces/black/r.png");
+    TextureManager::loadTexture(Black | Queen, "src/images/pieces/black/q.png");
 }
