@@ -1,10 +1,8 @@
 #include "event_handler.h"
 
-EventHandler::EventHandler(sf::RenderWindow &window, Board &board) : m_window(window), m_board(board) {}
-
-void EventHandler::listen() const {
+void EventHandler::listen() {
     for (auto event = sf::Event{}; m_window.pollEvent(event);) {
-        switch(event.type) {
+        switch (event.type) {
             case sf::Event::Closed:
                 this->onClose();
                 break;
@@ -17,23 +15,23 @@ void EventHandler::listen() const {
     }
 }
 
-void EventHandler::onClose() const {
+void EventHandler::onClose() {
     m_window.close();
 }
 
-void EventHandler::onMouseClick(const sf::Event &event) const {
-    switch (event.mouseButton.button) {
-        case sf::Mouse::Left:
-            if(m_board.selectedPieceIndex == -1) {
-                m_board.grabPiece();
-            } else {
-                m_board.placePiece();
-            }
-            break;
-        case sf::Mouse::Right:
-            m_board.resetSelectedPiece();
-            break;
-        default:
-            break;
-    }
+void EventHandler::onMouseClick(const sf::Event &event) {
+    // switch (event.mouseButton.button) {
+    //     case sf::Mouse::Left:
+    //         if (m_board.selectedPieceIndex == -1) {
+    //             m_board.grabPiece();
+    //         } else {
+    //             m_board.placePiece();
+    //         }
+    //         break;
+    //     case sf::Mouse::Right:
+    //         m_board.resetSelectedPiece();
+    //         break;
+    //     default:
+    //         break;
+    // }
 }

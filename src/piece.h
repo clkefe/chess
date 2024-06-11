@@ -1,61 +1,43 @@
 #ifndef PIECE_H
 #define PIECE_H
-#include <map>
 #include <vector>
 
-static constexpr int PIECE_TYPE_MASK = 0b00111;
-static constexpr int PIECE_WHITE_COLOR_MASK = 0b01000;
-static constexpr int PIECE_BLACK_COLOR_MASK = 0b10000;
-static constexpr int PIECE_COLOR_MASK = PIECE_WHITE_COLOR_MASK | PIECE_BLACK_COLOR_MASK;
-
-// Game Constants
-static constexpr int WHITE_PAWN_STARTING_RANK{6};
-static constexpr int BLACK_PAWN_STARTING_RANK{1};
-
 class Piece {
+    /**
+     * This is a 5-bit int representation for the piece type and color.
+     *
+     * The left two bits represent the color
+     *  - 8: White
+     *      - 16 Black
+     *
+     * The right three bits represent the type
+     *      - 0: None
+     *      - 1: King
+     *      - 2 Pawn
+     *      - 3: Knight
+     *      - 4: Bishop
+     *      - 5: Rook
+     *      - 6: Queen
+     *
+     *  ex.
+     *      - Black Pawn: 10001
+     *      - White Knight: 10011
+    **/
+    int m_identifier;
+
+    std::vector<int> m_legalMoves{};
+
+    int m_rank{0};
+    int m_file{0};
+
 public:
-    // PIECE TYPE
-    static constexpr int None{0};
-    static constexpr int King{1};
-    static constexpr int Pawn{2};
-    static constexpr int Knight{3};
-    static constexpr int Bishop{4};
-    static constexpr int Rook{5};
-    static constexpr int Queen{6};
+    explicit Piece(int identifier);
+    ~Piece() = default;
 
-    // PIECE COLOR
-    static constexpr int White{8};
-    static constexpr int Black{16};
+    int getColor() const;
+    int getType() const;
 
-    static const std::map<char, int> pieceCharToValue;
-
-    static std::vector<int> legalMoves;
-
-    static void loadPieceTextures();
-
-    static bool isColor(const int &piece, const int &color);
-
-    static int getColor(const int &piece);
-
-    static int getType(const int &piece);
-
-    static void generateMoves(int piece, const int &squareIndex, const int board[]);
-
-    static void generatePawnMoves(int piece, int rank, int file, const int board[]);
-
-    static void generateRookMoves(int piece, int rank, int file, const int board[]);
-
-    static void generateBishopMoves(int piece, int rank, int file, const int board[]);
-
-    static void generateQueenMoves(int piece, int rank, int file, const int board[]);
-
-    static void generateKnightMoves(int piece, int rank, int file, const int board[]);
-
-    static void generateKingMoves(int piece, int rank, int file, const int board[]);
-
-    static void generateLinearSlidingMoves(int piece, int rank, int file, bool isVertical, const int board[]);
-
-    static void generateDiagonalSlidingMoves(int piece, int rank, int file, const int board[]);
+    void generateMoves();
 };
 
 #endif //PIECE_H

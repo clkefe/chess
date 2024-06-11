@@ -1,21 +1,22 @@
 #ifndef EVENT_HANDLER_H
 #define EVENT_HANDLER_H
 
-#include "board.h"
 #include <SFML/Graphics.hpp>
+#include "board.h"
 
 class EventHandler {
     sf::RenderWindow &m_window;
-    Board            &m_board;
+    Board &m_board;
 
-    void onClose() const;
-    void onMouseClick(const sf::Event& event) const;
+    void onClose();
+
+    void onMouseClick(const sf::Event &event);
 
 public:
-    EventHandler(sf::RenderWindow &window, Board &board);
-    ~EventHandler() = default;
+    EventHandler(sf::RenderWindow &window, Board &board) : m_window(window), m_board(board) {
+    }
 
-    void listen() const;
+    void listen();
 };
 
 #endif //EVENT_HANDLER_H

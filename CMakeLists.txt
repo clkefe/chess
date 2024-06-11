@@ -19,16 +19,20 @@ add_executable(Chess src/main.cpp
         src/texture_manager.h
         src/event_handler.cpp
         src/event_handler.h
+        src/game_manager.cpp
+        src/game_manager.h
+        src/PieceManager.cpp
+        src/PieceManager.h
 )
 target_link_libraries(Chess PRIVATE sfml-graphics)
 target_compile_features(Chess PRIVATE cxx_std_17)
 
-if(WIN32)
+if (WIN32)
     add_custom_command(
             TARGET Chess
             COMMENT "Copy OpenAL DLL"
             PRE_BUILD COMMAND ${CMAKE_COMMAND} -E copy ${SFML_SOURCE_DIR}/extlibs/bin/$<IF:$<EQUAL:${CMAKE_SIZEOF_VOID_P},8>,x64,x86>/openal32.dll $<TARGET_FILE_DIR:Chess>
             VERBATIM)
-endif()
+endif ()
 
 install(TARGETS Chess)
