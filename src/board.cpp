@@ -69,40 +69,6 @@ void Board::drawBackground() {
 //     m_window.draw(highlights);
 // }
 
-// void Board::drawPieces() {
-//     for (int i = 0; i < 64; i++) {
-//         if (square[i] != Piece::None) {
-//             const int piece = square[i];
-//
-//             sf::Sprite sprite;
-//             sprite.setTexture(TextureManager::getTexture(piece));
-//
-//             const int rank = i / 8;
-//             const int file = i % 8;
-//
-//             const float pos_x = static_cast<float>(file) * 100;
-//             const float pos_y = static_cast<float>(rank) * 100;
-//
-//             // Skip rendering the selected piece now. It will be rendered last so it is on the top.
-//             if (i == selectedPieceIndex) {
-//                 selectedPieceSprite = sprite;
-//                 continue;
-//             }
-//
-//             sprite.setPosition(pos_x, pos_y);
-//
-//             m_window.draw(sprite);
-//         }
-//     }
-//
-//     if (selectedPieceIndex != -1) {
-//         const float pos_x = static_cast<float>(sf::Mouse::getPosition(m_window).x) - 50;
-//         const float pos_y = static_cast<float>(sf::Mouse::getPosition(m_window).y) - 50;
-//
-//         selectedPieceSprite.setPosition(pos_x, pos_y);
-//         m_window.draw(selectedPieceSprite);
-//     }
-// }
 
 // void Board::grabPiece() {
 //     const int howeredSquareIndex = getHoveredSquareIndex();

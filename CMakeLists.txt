@@ -23,6 +23,8 @@ add_executable(Chess src/main.cpp
         src/game_manager.h
         src/PieceManager.cpp
         src/PieceManager.h
+        src/Graphics/GraphicsManager.cpp
+        src/Graphics/GraphicsManager.h
 )
 target_link_libraries(Chess PRIVATE sfml-graphics)
 target_compile_features(Chess PRIVATE cxx_std_17)

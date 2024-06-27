@@ -1,19 +1,20 @@
 #ifndef GAME_MANAGER_H
 #define GAME_MANAGER_H
-#include "board.h"
+
+#include "Graphics/GraphicsManager.h"
 #include "event_handler.h"
+#include "piece.h"
 
 #include <iostream>
-
-#include "piece.h"
 
 const sf::VideoMode GAME_RES = {800, 800};
 const std::string GAME_TITLE = "Chess Game";
 
 class GameManager {
+    sf::RenderWindow m_window{GAME_RES, GAME_TITLE, sf::Style::Close};
+
     EventHandler m_eventHandler;
-    sf::RenderWindow m_window;
-    Board m_board;
+    GraphicsManager m_graphicsManager;
 
     Piece square[64]{};
     int selectedPieceIndex{-1};

@@ -42,7 +42,7 @@ public:
 
     static void generateMoves();
 
-    static bool isColor(Piece piece, const int &color);
+    static bool isColor(const Piece &piece, const int &color);
 };
 
 #endif //PIECEMANAGER_H

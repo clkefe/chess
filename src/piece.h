@@ -31,9 +31,11 @@ class Piece {
     int m_file{0};
 
 public:
+    Piece();
     explicit Piece(int identifier);
     ~Piece() = default;
 
+    int getIdentifier() const;
     int getColor() const;
     int getType() const;
 

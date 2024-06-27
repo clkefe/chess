@@ -4,9 +4,7 @@
 #include "PieceManager.h"
 #include "texture_manager.h"
 
-GameManager::GameManager() : m_eventHandler(m_window, m_board),
-                             m_window(GAME_RES, GAME_TITLE, sf::Style::Close),
-                             m_board(m_window) {
+GameManager::GameManager() : m_eventHandler(m_window), m_graphicsManager(m_window, square) {
     TextureManager::loadPieceTextures();
 
     loadFromFEN("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1");
@@ -17,14 +15,7 @@ GameManager::GameManager() : m_eventHandler(m_window, m_board),
 void GameManager::loop() {
     while (m_window.isOpen()) {
         m_eventHandler.listen();
-
-        m_window.clear();
-
-        m_board.drawBackground();
-        // m_board.drawLegalMovesHighlight();
-        // m_board.drawPieces();
-
-        m_window.display();
+        m_graphicsManager.draw();
     }
 }
 

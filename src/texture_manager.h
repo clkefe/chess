@@ -10,7 +10,7 @@ public:
 
     static bool loadTexture(const int &piece, const std::string &filePath);
 
-    static sf::Texture &getTexture(const int &piece);
+    static sf::Texture &getTexture(int piece);
 
     static void loadPieceTextures();
 };

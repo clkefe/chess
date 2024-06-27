@@ -2,7 +2,13 @@
 
 #include "PieceManager.h"
 
+Piece::Piece() : m_identifier(PieceManager::None) {}
+
 Piece::Piece(const int identifier) : m_identifier(identifier) {}
+
+int Piece::getIdentifier() const {
+    return m_identifier;
+}
 
 int Piece::getColor() const {
     return (m_identifier & PieceManager::PIECE_COLOR_MASK);
